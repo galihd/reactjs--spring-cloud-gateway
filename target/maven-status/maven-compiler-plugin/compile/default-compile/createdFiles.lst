@@ -1,0 +1,13 @@
+umkm\icaland\apigateway\AmazonConfig.class
+umkm\icaland\apigateway\model\User.class
+umkm\icaland\apigateway\security\Securityconfig.class
+umkm\icaland\apigateway\security\AppUserDetailsService.class
+umkm\icaland\apigateway\security\AppUserDetails.class
+umkm\icaland\apigateway\security\ControllerSecurityadvice.class
+umkm\icaland\apigateway\security\Securityconfig$1.class
+umkm\icaland\apigateway\repositories\NonReactiveRepo.class
+umkm\icaland\apigateway\Appcontroller.class
+umkm\icaland\apigateway\ApiGatewayApplication.class
+umkm\icaland\apigateway\repositories\AppUserRepo.class
+umkm\icaland\apigateway\security\authprovider.class
+umkm\icaland\apigateway\Webfluxconfig.class
