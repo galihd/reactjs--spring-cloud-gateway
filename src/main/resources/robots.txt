@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /*.mp4$
+Disallow: /*.ttf$
+Disallow: /*.otf$
+Sitemap: https://www.icaland.id/products/productlist

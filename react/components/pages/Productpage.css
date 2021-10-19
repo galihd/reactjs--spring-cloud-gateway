@@ -1,0 +1,44 @@
+.productpage{
+    background-color: white;
+}
+.productpage-logo-container{
+    box-sizing: border-box;
+    width: 100;
+    padding: 10px;
+}
+.productpage-logo-container img{
+    width: 10rem;
+    height: 10rem;
+}
+
+.pagenav{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: black;
+}
+.pagelink{
+    width: 130px;
+    padding: 5px;
+    display: inline-block;
+    margin: 0 10px;
+    position: relative;
+    font-size: 13px;
+    color: black;
+}
+
+.pagelink::before{
+    content: "";
+    position: absolute;
+    width: 0px;
+    background-color: black;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    transition: all 500ms;
+}
+.pagelink:hover{
+    font-size: 15px;
+}

@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "athletic-fonts";
+    src: url(../../public/images/Athletic.TTF) format('truetype');
+}
+
+.card-item{
+    margin: 10px 10px;
+}
+.card-item img{
+    width: 15rem;
+    height: 15rem;
+    transition: all 0.5s ease-out;
+}
+.card-info{
+    text-align: left;
+}
+.card-info h2 span,.card-info h3{
+    font-family: "athletic-fonts";
+    color: black;
+    font-weight: 400;
+}
+.card-info h2 span{
+    font-size: 15px;
+    cursor: pointer;
+}
+.card-info h3{
+    font-size: 13px;
+}
+.hovered-enter,.hovered-exit{
+    opacity: 0.6;
+    transition: opacity 100ms;
+}
+.thumb-wrapper {
+    cursor: pointer;
+}

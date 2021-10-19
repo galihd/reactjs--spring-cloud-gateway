@@ -1,0 +1,77 @@
+@font-face {
+    font-family: "anurati-fonts";
+    src: url(../../public/images/Anurati-Regular.otf) format('opentype');
+}
+
+nav{
+    display: flex;
+    position: sticky;
+    height: 8%;
+    padding: 15px 10%;
+    justify-content: space-around;
+    align-items: center;
+    background-color: black;
+    width: 100%;
+    transition: all 0.5ms ease-in;
+    opacity: 0.8;
+    z-index: 100;
+}
+.show{
+    top: 0;
+}
+.hide{
+    top: -50;
+}
+.nav-logo {
+    background-color: black;
+    margin-right: auto;
+    font-weight: bold;
+    font-size: 15px;
+}
+.nav-logo a {
+    font-family: "anurati-fonts";
+}
+.nav-items,.nav-logo{
+    padding: 5px 20px;
+    width: fit-content;
+}
+.nav-items{
+    position: relative;
+}
+.nav-children{
+    position: absolute;
+    background-color: aqua;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+}
+.nav-items:hover a span, .nav-items:hover svg path{
+    color: darkgray;
+}
+.link-icon{
+    display: none;
+}
+@media screen 
+and (max-width: 600px)
+{
+    .link-caption{
+        display: none;
+    }
+    .link-icon{
+        display: block;
+    }
+
+}
+@media screen 
+and (max-device-width: 360px) 
+and (max-device-height: 640px) 
+and (-webkit-device-pixel-ratio: 4) 
+{
+    .link-caption{
+        display: none;
+    }
+    .link-icon{
+        display: block;
+    }
+
+}

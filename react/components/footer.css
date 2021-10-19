@@ -1,0 +1,101 @@
+.footer{
+    background-color: black;
+    width: 100%;
+    padding: 4rem 3rem;
+    object-fit: contain;
+    color: white;
+}
+.footer-section h4, .footer-link a{
+    font-weight: 100;
+}
+.footer-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+}
+.footer-content{
+    display: flex;
+    flex-wrap: wrap;
+}
+.footer-logo{
+    display: flex;
+    flex-wrap: wrap;
+    align-self: center;
+    margin: 0 2rem;
+    justify-content: center;
+}
+.footer-logo p {
+    margin: 1rem;
+    width: 100%;
+}
+.footer-logo img{
+    width:10rem;
+    height: 10rem;
+}
+.footer-logo .partner-logo img{
+    width:7rem;
+    height: 2rem;
+}
+.partner-logo{
+    margin: 0px 0.2rem;
+}
+.footer-section{
+    width: 18rem;
+    height: 10rem;
+    text-align: left;
+    margin: 1px;
+}
+.footer-section h4{
+    color: white;
+    font-size: 15px;
+    font-weight: normal;
+
+}
+.footer-section ul{
+    list-style: none;
+    margin-top: 0.8rem;
+}
+.footer-link a {
+    font-size: 13px;
+}
+.footer-link a:hover,
+.icon-wrapper:hover,
+.icon-wrapper:hover svg path
+{
+    color: gray;
+    border-color: gray;
+}
+
+.icon-wrapper{
+    display: inline-block;
+    padding: 8px;
+    background-color: transparent;
+    border: 1px white solid;
+    border-radius: 8px;
+    margin: 8px;
+    margin-left: 0;
+}
+.icon-wrapper svg {
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    vertical-align: bottom;
+}
+@media screen 
+and (max-width: 600px){
+    .footer-container{
+        flex-wrap: wrap;
+    }
+    .footer-section,.footer-content{
+        width: 100%;
+    }
+    .footer-section{
+        height: 6rem;
+    }
+    .footer-logo{
+        justify-self: center;
+        margin: 0 auto;
+    }
+}
+

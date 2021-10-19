@@ -1,0 +1,55 @@
+
+.carousel{
+    padding: 4rem;
+    background-color: white;
+    display: block;
+}
+.carousel-head{
+    text-align: left;
+    margin-bottom: 2rem;
+}
+.carousel-item a{
+    cursor: pointer;
+}
+.carousel-item img{
+    width: 8rem;
+    height: 8rem;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+.carousel-info{
+    margin-top: 5px;
+    font-size: 10px;
+    color: black;
+    display: block;
+}
+.carousel-hovered-enter{
+    opacity: 0.8;
+}
+
+.slick-prev::before, .slick-next::before{
+    color:black ;
+}
+
+.homepage .slick-slider{
+    /* margin-top: 10px; */
+    margin-bottom: 0;
+}
+
+.homepage .slick-slide div {
+    outline: none;
+}
+
+.homepage .carousel-item:hover img{
+    width: 9rem;
+    height: 9rem;
+}
+
+.slick-prev {
+    left: 2% !important;
+    z-index: 1;
+  }
+  .slick-next {
+    right: 2% !important;
+    z-index: 1;
+  }

@@ -1,0 +1,41 @@
+
+.cards{
+    height: fit-content;
+    background-color: white;
+    padding: 2rem;
+}
+.cards-header{
+    width: 100%;
+    text-align: left;
+    padding: 3px 0;
+    cursor: pointer;
+}
+.cards-header svg{
+    font-size: 17px;
+    display: inline-block;
+}
+.cards-header span,.cards-header h3{
+    display: inline;
+    font-family: "athletic-fonts";
+    margin: 10px;
+    color: black;
+}
+.cards > h1,.cards > h4{
+    color: black;
+    width: 100%;
+    margin-top: 1rem;
+}
+.cardscontainer{
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.cardscontainer.active{
+    display: flex;
+}
+.cardscontainer.hidden{
+    display: none;
+}
+

@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "athletic-fonts";
+  src: url(../public/images/Athletic.TTF) format('truetype');
+}
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "athletic-fonts";
+  font-weight: 300;
+  min-height: 0;
+  min-width: 0;
+}
+
+a{
+  text-decoration: none;
+  color: aliceblue;
+}
+
+body{
+  background-color: #404040;
+}
+
+
+.App {
+  text-align: center;
+}
