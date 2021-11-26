@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.ReactiveAuthenticationManagerResolver;
@@ -36,7 +38,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtReactiveAuthenticationManager;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
+import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
@@ -88,22 +93,38 @@ public class Securityconfig{
             "/login/**",
             "/products/**",
             "/api/products/**").permitAll()
-            .pathMatchers(HttpMethod.POST,"/login*","/api/user","/oauthlogin","/adminlogin").permitAll()
+            .pathMatchers(HttpMethod.POST,"/login*","/logout*","/api/user","/oauthlogin","/adminlogin").permitAll()
             .pathMatchers(HttpMethod.GET,"/api/payments").hasAnyAuthority("appDev","appAdmin")
-            .pathMatchers(HttpMethod.POST,"/api/products**").hasAnyAuthority("appDev","appAdmin")
-            .pathMatchers(HttpMethod.PUT,"/api/products**","/api/payment**").hasAnyAuthority("appDev","appAdmin")
-            .pathMatchers(HttpMethod.DELETE,"/api/products**","/api/payment**").hasAnyAuthority("appDev","appAdmin")
-            .pathMatchers("/api/order/**","/api/userorder**","/api/payment**").hasAnyAuthority("appUser","oauth2AppUser","appDev","appAdmin")
+            .pathMatchers(HttpMethod.POST,"/api/products/**","/api/mobil").hasAnyAuthority("appDev","appAdmin")
+            .pathMatchers(HttpMethod.PUT,"/api/products/**","/api/payment/**").hasAnyAuthority("appDev","appAdmin")
+            .pathMatchers(HttpMethod.DELETE,"/api/products/**","/api/payment/**").hasAnyAuthority("appDev","appAdmin")
+            .pathMatchers("/api/order/**","/api/userorder/**","/api/payment/**").hasAnyAuthority("appUser","oauth2AppUser","appDev","appAdmin")
             .anyExchange().authenticated();
             })
-            .formLogin().disable()
-            .httpBasic().disable()
+            .httpBasic().authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED))
+            .and()
             .oauth2ResourceServer(resourceconfig->{
                 resourceconfig
                 .jwt(jwtconfig -> 
                     jwtconfig.authenticationManager(jwtReactiveAuthenticationManager()));
         })
-        .logout(logoutspec -> logoutspec.logoutUrl("/logout"))
+        .logout(logoutspec -> logoutspec.logoutUrl("/logout")
+        .logoutSuccessHandler(new ServerLogoutSuccessHandler() {
+            @Override
+            public Mono<Void> onLogoutSuccess(WebFilterExchange exchange, Authentication authentication) {
+                ServerHttpResponse response = exchange.getExchange().getResponse();
+                response.getCookies().remove("JSESSIONID");
+                response.setStatusCode(HttpStatus.FOUND);
+                return exchange.getExchange().getSession()
+                    .flatMap(session -> {
+                        if(session.getAttribute("user") != null)
+                            return session.invalidate();
+                        System.out.println("invalidating jwt");
+                        return Mono.empty();
+                    });
+            }
+        })
+        )
         .build();
 
     }
@@ -145,22 +166,28 @@ public class Securityconfig{
             if(token != null){
                 System.out.println("token : " +token.substring("Bearer ".length()));
                 return Mono.just(new BearerTokenAuthenticationToken(token.substring("Bearer ".length())));
+            }else{
+                return swe.getSession()
+                        .filter(sessionobj -> sessionobj.getAttribute("user") != null)
+                        .flatMap(swesession ->{
+                            User sessionuser = new User();
+                            try {
+                                sessionuser = JSONmapper.readValue(swesession.getAttribute("user").toString(), User.class);
+                                System.out.println("user session : " + sessionuser.toString());
+                            } catch (JsonProcessingException e) {
+                                e.printStackTrace();
+                            }
+                            return Mono.just(Authentication.class.cast(
+                                new UsernamePasswordAuthenticationToken(
+                                    sessionuser.getEmail(), sessionuser.getPassword())));
+                        })
+                        .switchIfEmpty(Mono.error(new AuthenticationCredentialsNotFoundException("session not found")));
             }
-            return swe.getSession()
-                    .filter(sessionobj -> sessionobj.getAttribute("user") != null)
-                    .flatMap(swesession ->{
-                        User sessionuser = new User();
-                        try {
-                            sessionuser = JSONmapper.readValue(swesession.getAttribute("user").toString(), User.class);
-                            System.out.println("user session : " + sessionuser.toString());
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                        return Mono.just(Authentication.class.cast(
-                            new UsernamePasswordAuthenticationToken(
-                                sessionuser.getEmail(), sessionuser.getPassword())));
-                    })
-                    .switchIfEmpty(Mono.error(new AuthenticationCredentialsNotFoundException("session not found")));
+        });
+        aFilter.setAuthenticationFailureHandler((exchange,exception)->{
+            exchange.getExchange().getResponse().getHeaders().remove(HttpHeaders.WWW_AUTHENTICATE);
+            exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getExchange().getResponse().setComplete();
         });
         return aFilter;
     }
@@ -207,13 +234,6 @@ public class Securityconfig{
         });
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
-    // @Bean
-    // OidcAuthorizationCodeReactiveAuthenticationManager oReactiveAuthenticationManager(){
-    //     OidcAuthorizationCodeReactiveAuthenticationManager authManager = 
-    //         new OidcAuthorizationCodeReactiveAuthenticationManager(new WebClientReactiveAuthorizationCodeTokenResponseClient(), 
-    //             appUserDetailsService);
-    //     return authManager;
-    // }
 
         
     @Bean

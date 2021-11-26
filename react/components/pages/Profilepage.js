@@ -152,7 +152,7 @@ function Profilepage() {
 
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
     const schema = yup.object().shape({
-        password : (userContext.role === "oauth2AppUser") ? 
+        password : (userContext.role.includes("oauth2AppUser")) ? 
             yup.string().nullable().notRequired() 
             : yup.string().required().test(function(value,context){
                 return (value === "" || value === undefined) ? true : 

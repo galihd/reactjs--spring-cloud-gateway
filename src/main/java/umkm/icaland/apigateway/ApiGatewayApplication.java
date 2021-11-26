@@ -10,6 +10,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import org.springframework.http.HttpHeaders;
 import org.springframework.session.data.redis.config.annotation.web.server.EnableRedisWebSession;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -49,6 +50,7 @@ public class ApiGatewayApplication {
 										.setDenyEmptyKey(false);
 								})
 								.saveSession()
+								.removeResponseHeader(HttpHeaders.WWW_AUTHENTICATE)
 					)
 					.uri("https://api.icaland.id/")
 					)

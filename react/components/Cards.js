@@ -3,21 +3,11 @@ import CardItem from './CardItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight,faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import './Cards.css';
-import productservices from '../api/productservices';
+// import productservices from '../api/productservices';
 
 
-function Cards({category}) {
+function Cards({category,productlist}) {
     const [display, setdisplay] = useState(true);
-    const [productlist, setproductlist] = useState();
-
-    useEffect(() => {
-        productservices.getProductsByCategory(category.toLowerCase()).then(
-            (productlist)=>{
-                setproductlist(productlist);
-            })
-            .catch(error => {console.log("Error : " + error)});
-    }, [])
-
     return (
         <div className="cards">
             <div className="cards-header"

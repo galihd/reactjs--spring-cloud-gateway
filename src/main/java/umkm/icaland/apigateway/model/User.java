@@ -41,11 +41,11 @@ public class User {
         this.avatar_url = avatar_url;
     }
 
-    public String getId() {
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setId(String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -113,56 +113,11 @@ public class User {
         this.avatar_url = avatar_url;
     }
 
-    public User id(String id) {
-        setId(id);
-        return this;
-    }
-
-    public User password(String password) {
-        setPassword(password);
-        return this;
-    }
-
-    public User email(String email) {
-        setEmail(email);
-        return this;
-    }
-
-    public User phone(String phone) {
-        setPhone(phone);
-        return this;
-    }
-
-    public User address(String address) {
-        setAddress(address);
-        return this;
-    }
-
-    public User postalcode(String postalcode) {
-        setPostalcode(postalcode);
-        return this;
-    }
-
-    public User roles(String roles) {
-        setRoles(roles);
-        return this;
-    }
-
-    public User authprovider(String authprovider) {
-        setAuthprovider(authprovider);
-        return this;
-    }
-
-    public User avatar_url(String avatar_url) {
-        setAvatar_url(avatar_url);
-        return this;
-    }
-
 
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
+            " id='" + getUserId() + "'" +
             ", password='" + getPassword() + "'" +
             ", email='" + getEmail() + "'" +
             ", phone='" + getPhone() + "'" +

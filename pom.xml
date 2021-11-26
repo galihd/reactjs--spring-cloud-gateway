@@ -105,6 +105,17 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<devserver.host>0.0.0.0</devserver.host>
+					<devserver.port>8081</devserver.port>
+					<version>1</version>
+					<projectId>umkm-app</projectId>
+				</configuration>
+			</plugin>
+			<!-- <plugin>
 				<groupId>com.heroku.sdk</groupId>
 				<artifactId>heroku-maven-plugin</artifactId>
 				<version>3.0.4</version>
@@ -112,13 +123,13 @@
 					<appName>react-scg</appName>
 					<jdkVersion>11</jdkVersion>
 					<configVars>
-						<JAVA_OPTS>-XX:+UseContainerSupport -Xss512k -Xmx230m -XX:+UseCompressedOops -XX:+UseG1GC -verbose:gc</JAVA_OPTS>
+						<JAVA_OPTS>-XX:+UseContainerSupport -Xss512k -Xmx200m -XX:+UseCompressedOops</JAVA_OPTS>
 					</configVars>
 					<processTypes>
 						<web>java $JAVA_OPTS -Dserver.port=$PORT -javaagent:target/classes/newrelic/newrelic.jar -jar target/api-gateway-${project.version}.jar</web>
 					</processTypes>
 				</configuration>
-			  </plugin>
+			  </plugin> -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>

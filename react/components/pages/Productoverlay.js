@@ -7,6 +7,7 @@ import { useCartItemContext } from '../../Context/CartContext';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMinusCircle,faPlusCircle} from '@fortawesome/free-solid-svg-icons'
+import { useHistory } from 'react-router';
 
 ReactModal.setAppElement("#react");
 const Wrapperdiv = styled.div`
@@ -75,14 +76,19 @@ function Productoverlay({show,closemodal,product}) {
     }
 
     const cartItemContext = useCartItemContext();
+    const history = useHistory();
     const [selectedimg, setselectedimg] = useState(product.displays[0]);
     const [itemqty, setitemqty] = useState(1);
 
 
     const addProducthandler = ()=>{
-        cartItemContext.addCartItem(product,itemqty);
-        setitemqty(1);
-        closemodal();
+        if(localStorage.getItem("user")){
+            cartItemContext.addCartItem(product,itemqty);
+            setitemqty(1);
+            closemodal();
+        }else{
+            history.push("/login");
+        }
     }
     return (
             <ReactModal 

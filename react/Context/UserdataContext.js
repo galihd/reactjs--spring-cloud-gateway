@@ -2,6 +2,7 @@ import React, { useContext,useState,useEffect } from 'react';
 import { useHistory } from 'react-router';
 import userservice from '../api/userservice';
 import Cookies from 'js-cookie';
+import axiosinstance from '../api/axiosconfig';
 const AppUserContext = React.createContext({
     userId : "",
     email : "",
@@ -24,6 +25,8 @@ export function useUserContext(){
     return useContext(AppUserContext);
 }
 
+var authInterceptor;
+var unAuthInterceptor;
 
 function UserdataContext({children}) {
     const history = useHistory();
@@ -39,7 +42,25 @@ function UserdataContext({children}) {
         });
     const clearUser = () => {
         setuser({});
+        localStorage.clear();
+        sessionStorage.clear();
+        ejectInterceptor();
     };
+
+    const LogoutUser = ()=>{
+        if(localStorage.getItem("user")){
+            if(JSON.parse(localStorage.getItem("user")).roles.includes("oauth2AppUser")){
+                clearUser();
+            }else{
+                userservice.logoutUser().then(resp =>{
+                    clearUser();
+                    Cookies.remove("JSESSIONID");
+                });
+            }
+        }
+        history.push("/login");
+    }
+
     const signUserIn = (email,password)=>{
         return userservice.postCredentials({
             email:email,
@@ -71,6 +92,7 @@ function UserdataContext({children}) {
             .then(response =>{
                 if(response.status === 200){
                     localStorage.setItem("user",JSON.stringify({...response.data,token:token.id_token}));
+                    setInterceptor(token.id_token);
                     setuser(JSON.parse(localStorage.getItem("user")));
                     return history.goBack();
                 }
@@ -79,17 +101,9 @@ function UserdataContext({children}) {
                 console.log(error);
         })  
     };
-    const LogoutUser = ()=>{
-        return userservice.logoutUser().then(resp =>{
-                clearUser();
-                Cookies.remove("JSESSIONID");
-                sessionStorage.clear();
-                localStorage.clear();
-                history.push("/");
-        })
-    }
+
     const updateUser = (updatedata) =>{
-        if(user.roles === "oauth2Appuser"){
+        if(user.roles.includes("oauth2Appuser")){
             let {password,...rest} = {...user,...updatedata};
             return userservice.updateUser(rest).then(response=>{
                 if(response.status === 200){
@@ -110,18 +124,39 @@ function UserdataContext({children}) {
             });
         }
     } 
+    const setInterceptor = (token) =>{
+        authInterceptor = axiosinstance.interceptors.request.use(request =>{
+                request.headers.authorization = `Bearer ${token}`;
+                return request;
+            });
+    }
+    const setUnAuthInterceptor = () => {
+        unAuthInterceptor = axiosinstance.interceptors.response.use(response => {return response;},error=>{
+            console.log("error catched, status : ",error.response.status);
+            if(error.response.status === 401){
+                console.log("intercepting unauthorized request");
+                LogoutUser();
+            }
+            return Promise.reject(error);
+        });
+    }
+    const ejectInterceptor = () =>{
+        axiosinstance.interceptors.request.eject(authInterceptor);
+        axiosinstance.interceptors.response.eject(unAuthInterceptor);
+    }
     useEffect(() => {
         if(localStorage.getItem("user")){
-            setuser(JSON.parse(localStorage.getItem("user")));
+            let storageuser = JSON.parse(localStorage.getItem("user"));
+            if(storageuser.roles.includes("oauth2AppUser"))
+                setInterceptor(storageuser.token);
 
+            setuser(storageuser);
         }
-        return () => {
-            clearUser();
-            sessionStorage.clear();
-            localStorage.clear();
-            Cookies.remove("JSESSIONID");
+        setUnAuthInterceptor();
+        return ()=>{
+            LogoutUser();
         }
-    }, [])
+    }, []);
     return (
         <AppUserContext.Provider 
         value={{

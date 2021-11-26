@@ -110,7 +110,7 @@ public class AppUserDetailsService extends OidcReactiveOAuth2UserService impleme
                 return appUserRepo.findByEmail(oauthuser.getAttribute("email"))
                 .flatMap(existinguser -> {
                     System.out.println("db check existing user : " + existinguser.toString());
-                    if(existinguser.getId() != null){
+                    if(existinguser.getUserId() != null){
                         return Mono.just(new AppUserDetails(existinguser, userRequest.getIdToken()));
                     }else{
                         User user = new User();

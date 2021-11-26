@@ -17,16 +17,16 @@ function CardItem({product}) {
                 onClick={()=>setmodalOPen(true)}
                 onMouseEnter={()=>sethovered(true)}
                 onMouseOut={()=>sethovered(false)}>
-                    <CSSTransition in={hovered} timeout={200} 
+                <CSSTransition in={hovered} timeout={200} 
                     classNames={{enter: "hovered-enter"
                                 ,enterActive:"hovered-active",
                                 exit:"hovered-exit",
                                 exitActive:"hovered-exit-active"}}>
-                <img
-                    src={hovered? `data:image/png;base64,${product.displays[0]}` : `data:image/png;base64,${product.displays[1]}`}
-                    alt={product.productName}
-                />
-                    </CSSTransition>
+                    <img
+                        src={hovered? `data:image/png;base64,${product.displays[1]}` : `data:image/png;base64,${product.displays[0]}`}
+                        alt={product.productName}
+                    />
+                </CSSTransition>
             </a>
             <div className="card-info">
                 <h2 onClick={()=>setmodalOPen(true)}>

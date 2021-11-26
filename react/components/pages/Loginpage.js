@@ -152,7 +152,6 @@ function Loginpage() {
     const userContext = useUserContext();
     const [loginform, setloginform] = useState(true);
     const googlesuccesshandler = (response)=>{
-        console.log("oauth success",response.data);
         userContext.oauthSignIn(response.profileObj,response.tokenObj,"google");
     }
     const googlefailurehandler = (response)=>{

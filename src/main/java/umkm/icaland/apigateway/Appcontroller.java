@@ -86,12 +86,11 @@ public class Appcontroller {
     public Mono<ResponseEntity<Mono<User>>> manageoauthuser(@AuthenticationPrincipal Jwt jwt, @RequestParam("provider") String auth_provider){
         return jwtDecoder.decode(jwt.getTokenValue())
         .flatMap(decodedjwt -> {
-            System.out.println("incoming jwt : " + decodedjwt.getTokenValue());
-            System.out.println("incoming provider : "+ auth_provider);
             User user = new User();
             user.setEmail(decodedjwt.getClaim("email"));
             user.setAvatar_url(decodedjwt.getClaim("picture"));
             user.setAuthprovider(authprovider.valueOf(auth_provider).name());
+
             return Mono.just(ResponseEntity.ok().body(userService.manageOauthUser(user)));
         });
         
