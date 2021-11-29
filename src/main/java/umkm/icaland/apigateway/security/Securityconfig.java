@@ -137,6 +137,7 @@ public class Securityconfig{
         resolver.addCookieInitializer((builder)->{
             builder.httpOnly(true)
                     .domain("icaland.id")
+                    // .domain("localhost")
                     .path("/")
                     .sameSite("Strict")
                 .build();
